@@ -1,5 +1,3 @@
-Sure, here's the revised README with some emojis added:
-
 # GroupTabs 🗂️📑
 
 GroupTabs is a Chrome extension that lets you organize your open tabs into groups. With GroupTabs, you can easily create new tab groups, add tabs to existing groups, and switch between groups to keep your work organized and focused.
