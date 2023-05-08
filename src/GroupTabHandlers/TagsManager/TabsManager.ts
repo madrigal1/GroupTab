@@ -31,6 +31,15 @@ export interface ITabGroupCollapse {
   collapsed: boolean
   groupId: number
 }
+
+export interface ITabGroupRemoveOutput {
+  err: string
+  msg: string
+}
+
+export interface ITabGroupRemoveInput {
+  tabs: chrome.tabs.Tab[]
+}
 export class TabsManager {
   getCurrentTabQuery = { active: true, currentWindow: true }
   public async checkTabGroupExists({ tabGroupName }: IAddToGroupInput): Promise<boolean> {
@@ -115,5 +124,17 @@ export class TabsManager {
     const collapsed = tabGroups[0].collapsed
     await this.collapseGroup({ groupId, collapsed })
     return { err: '', collapsed: !collapsed, groupId }
+  }
+
+  public async ungroupTabs({ tabs }: ITabGroupRemoveInput): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.tabs.ungroup(this.getTabIds(tabs), () => resolve())
+    })
+  }
+
+  public async removeTabFromGroup(): Promise<ITabGroupRemoveOutput> {
+    const tabs = await this.getTabs(this.getCurrentTabQuery)
+    await this.ungroupTabs({ tabs })
+    return { err: '', msg: 'removed tab from group' }
   }
 }
