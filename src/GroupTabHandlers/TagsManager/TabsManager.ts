@@ -16,6 +16,21 @@ export interface IMoveTabToGroupInput {
   groupId: number
   tabs: chrome.tabs.Tab[]
 }
+
+export interface IGroupCollapseInput {
+  tabGroupName: string
+}
+
+export interface IGroupCollapseOutput {
+  err: string
+  collapsed: boolean
+  groupId: number
+}
+
+export interface ITabGroupCollapse {
+  collapsed: boolean
+  groupId: number
+}
 export class TabsManager {
   getCurrentTabQuery = { active: true, currentWindow: true }
   public async checkTabGroupExists({ tabGroupName }: IAddToGroupInput): Promise<boolean> {
@@ -80,5 +95,25 @@ export class TabsManager {
       await this.moveTabsToGroup({ groupId, tabs })
       return { id: groupId, title: tabGroupName }
     }
+  }
+  public async collapseGroup({
+    groupId,
+    collapsed,
+  }: ITabGroupCollapse): Promise<chrome.tabGroups.TabGroup> {
+    return new Promise((resolve) => {
+      chrome.tabGroups.update(groupId, { collapsed: !collapsed }, (group) => resolve(group))
+    })
+  }
+  public async toggleGroupCollapse({
+    tabGroupName,
+  }: IGroupCollapseInput): Promise<IGroupCollapseOutput> {
+    const tabGroups = await this.getTabGroups({ title: tabGroupName })
+    if (tabGroups.length === 0) {
+      return { err: 'tab group does not exist', collapsed: false, groupId: -1 }
+    }
+    const groupId = tabGroups[0].id
+    const collapsed = tabGroups[0].collapsed
+    await this.collapseGroup({ groupId, collapsed })
+    return { err: '', collapsed: !collapsed, groupId }
   }
 }

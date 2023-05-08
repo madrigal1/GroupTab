@@ -21,7 +21,7 @@ export interface ICmdHandlerOutput {
   msg: string
 }
 export default class CmdHandler {
-  public validCmd = ['a:']
+  public validCmd = ['a:', 'c:']
 
   public tabManager = new TabsManager()
 
@@ -58,6 +58,12 @@ export default class CmdHandler {
     if (cmd === 'a:') {
       const { id, title } = await this.tabManager.addToGroup({ tabGroupName: args[0] })
       return { err: '', msg: `added group ${title} with group_id ${id}` }
+    }
+    if (cmd === 'c:') {
+      const { err, collapsed, groupId } = await this.tabManager.toggleGroupCollapse({
+        tabGroupName: args[0],
+      })
+      return { err, msg: `toggled group ${groupId} to collapsed state: ${collapsed}` }
     }
     return { err: `No Handler for Cmd ${cmd} found`, msg: '' }
   }
