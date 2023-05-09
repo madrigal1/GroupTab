@@ -12,6 +12,7 @@ export enum Cmd {
   TOGGLE = 'toggle',
   REMOVE = 'remove',
   SEARCH = 'search',
+  KILL = 'kill',
 }
 
 export interface ICmd {
@@ -36,6 +37,10 @@ export default class CmdHandler {
     {
       name: Cmd.SEARCH,
       alias: ['search', 'sr'],
+    },
+    {
+      name: Cmd.KILL,
+      alias: ['kill', 'k'],
     },
   ]
   public tabManager = new TabsManager()
@@ -105,6 +110,13 @@ export default class CmdHandler {
           ? `Tab ${title} found and switched to. Tab_id: ${tab_id}`
           : `Tab ${title} not found`,
       }
+    }
+
+    if (cmd === Cmd.KILL) {
+      const { err, msg } = await this.tabManager.givenTabGroupDeleteTabGroup({
+        tabGroupName: args[0],
+      })
+      return { err, msg }
     }
     return { err: `No Handler for Cmd ${cmd} found`, msg: '' }
   }

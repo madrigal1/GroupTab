@@ -39,5 +39,5 @@ export default defineManifest({
       matches: [],
     },
   ],
-  permissions: ['tabGroups', 'tabs'],
+  permissions: ['tabGroups', 'tabs', 'activeTab', 'http://*/*', 'https://*/*'],
 })

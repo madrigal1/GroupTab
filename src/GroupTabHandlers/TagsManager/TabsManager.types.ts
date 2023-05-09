@@ -58,3 +58,11 @@ export interface IUpdateTab {
   tab: chrome.tabs.Tab
   settings: chrome.tabs.UpdateProperties
 }
+
+export interface IDeleteTas {
+  tabs: chrome.tabs.Tab[]
+}
+
+export interface ITabGroupInput {
+  tabGroupName: string
+}

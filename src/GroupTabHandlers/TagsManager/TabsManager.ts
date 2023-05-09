@@ -1,11 +1,13 @@
 import {
   IAddToGroupInput,
+  IDeleteTas,
   IGroupCollapseInput,
   IGroupCollapseOutput,
   IMoveTabGroup,
   IMoveTabToGroupInput,
   ITabGroup,
   ITabGroupCollapse,
+  ITabGroupInput,
   ITabGroupRemoveInput,
   ITabGroupRemoveOutput,
   ITabSearchInput,
@@ -120,10 +122,26 @@ export class TabsManager {
     })
   }
 
+  public async deleteTabs({ tabs }: IDeleteTas): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.tabs.remove(this.getTabIds(tabs), () => resolve())
+    })
+  }
   public async removeTabFromGroup(): Promise<ITabGroupRemoveOutput> {
     const tabs = await this.getTabs(this.getCurrentTabQuery)
     await this.ungroupTabs({ tabs })
     return { err: '', msg: 'removed tab from group' }
+  }
+
+  public givenTabGroupDeleteTabGroup = async ({ tabGroupName }: ITabGroupInput) => {
+    const tabGroup = await this.getTabGroups({ title: tabGroupName })
+    if (!tabGroup || tabGroup.length === 0) {
+      return { err: `tab group ${tabGroupName} does not exist`, msg: '' }
+    }
+    const tabs = await this.getTabs({ groupId: tabGroup[0].id })
+    console.log({ tabs, groupId: tabGroup[0].id, delete: true })
+    await this.deleteTabs({ tabs })
+    return { err: '', msg: `deleted tab group ${tabGroupName}` }
   }
 
   public givenTabNameSwitchToTab = async ({
