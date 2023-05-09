@@ -1,4 +1,6 @@
-![](https://hackmd.io/_uploads/HJrzO1_Eh.png)
+![Group Tabs Logo green](./logo_green.png)
+
+## About 📖
 
 GroupTabs is a Chrome extension that lets you organize your open tabs into groups. With GroupTabs, you can easily create new tab groups, add tabs to existing groups, and switch between groups to keep your work organized and focused.
 
