@@ -1,51 +1,21 @@
-export interface IAddToGroupInput {
-  tabGroupName: string
-}
-
-export interface IUpdateGroupInput {
-  groupId: number
-  tabGroupName: string
-}
-
-export interface ITabGroup {
-  id: number
-  title: string
-}
-
-export interface IMoveTabToGroupInput {
-  groupId: number
-  tabs: chrome.tabs.Tab[]
-}
-
-export interface IGroupCollapseInput {
-  tabGroupName: string
-}
-
-export interface IGroupCollapseOutput {
-  err: string
-  collapsed: boolean
-  groupId: number
-}
-
-export interface ITabGroupCollapse {
-  collapsed: boolean
-  groupId: number
-}
-
-export interface ITabGroupRemoveOutput {
-  err: string
-  msg: string
-}
-
-export interface ITabGroupRemoveInput {
-  tabs: chrome.tabs.Tab[]
-}
-export interface IMoveTabGroup {
-  index: number
-  groupId: number
-}
+import {
+  IAddToGroupInput,
+  IGroupCollapseInput,
+  IGroupCollapseOutput,
+  IMoveTabGroup,
+  IMoveTabToGroupInput,
+  ITabGroup,
+  ITabGroupCollapse,
+  ITabGroupRemoveInput,
+  ITabGroupRemoveOutput,
+  ITabSearchInput,
+  ITabSearchOutput,
+  IUpdateGroupInput,
+  IUpdateTab,
+} from './TabsManager.types'
 export class TabsManager {
   getCurrentTabQuery = { active: true, currentWindow: true }
+  getActiveTabQuery = { active: true }
   public async checkTabGroupExists({ tabGroupName }: IAddToGroupInput): Promise<boolean> {
     const groups: any = await new Promise((resolve) => {
       chrome.tabGroups.query({ title: tabGroupName }, (groups) => {
@@ -82,6 +52,12 @@ export class TabsManager {
   public async moveTabsToGroup({ groupId, tabs }: IMoveTabToGroupInput): Promise<number> {
     return new Promise((resolve) => {
       chrome.tabs.group({ groupId, tabIds: this.getTabIds(tabs) }, (groupId) => resolve(groupId))
+    })
+  }
+
+  public async updateTab({ tab, settings }: IUpdateTab): Promise<chrome.tabs.Tab | null> {
+    return new Promise((resolve) => {
+      chrome.tabs.update(tab.id || 0, settings, (tab) => resolve(tab || null))
     })
   }
 
@@ -148,5 +124,28 @@ export class TabsManager {
     const tabs = await this.getTabs(this.getCurrentTabQuery)
     await this.ungroupTabs({ tabs })
     return { err: '', msg: 'removed tab from group' }
+  }
+
+  public givenTabNameSwitchToTab = async ({
+    tabName,
+  }: ITabSearchInput): Promise<ITabSearchOutput> => {
+    const allTabs = await this.getTabs({})
+    console.log({
+      tabName,
+      allTabs: allTabs.map((ele) => ele.title),
+      allUrls: allTabs.map((ele) => ele.url),
+    })
+    const tab = allTabs.find((tab) => {
+      return (
+        tab.title?.toLowerCase().includes(tabName.toLowerCase()) ||
+        tab.url?.toLowerCase().includes(tabName.toLowerCase())
+      )
+    })
+    if (tab) {
+      const currTab = await this.updateTab({ tab, settings: this.getActiveTabQuery })
+      return { found: true, tab_id: tab.id || -1, title: currTab?.title || '' }
+    } else {
+      return { found: false, tab_id: -1, title: '' }
+    }
   }
 }
