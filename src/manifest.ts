@@ -13,7 +13,7 @@ export default defineManifest({
   },
   action: {
     default_popup: 'popup.html',
-    default_icon: 'img/icon_green.png',
+    default_icon: 'img/icon_black.png',
   },
   options_page: 'options.html',
   background: {
@@ -29,6 +29,7 @@ export default defineManifest({
   web_accessible_resources: [
     {
       resources: [
+        'img/icon_black.png',
         'img/icon_green.png',
         'img/logo-16.png',
         'img/logo-34.png',
