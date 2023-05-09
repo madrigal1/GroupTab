@@ -40,6 +40,10 @@ export interface ITabGroupRemoveOutput {
 export interface ITabGroupRemoveInput {
   tabs: chrome.tabs.Tab[]
 }
+export interface IMoveTabGroup {
+  index: number
+  groupId: number
+}
 export class TabsManager {
   getCurrentTabQuery = { active: true, currentWindow: true }
   public async checkTabGroupExists({ tabGroupName }: IAddToGroupInput): Promise<boolean> {
@@ -90,6 +94,12 @@ export class TabsManager {
     })
   }
 
+  public async moveTabGroup({ index, groupId }: IMoveTabGroup) {
+    return new Promise((resolve) => {
+      chrome.tabGroups.move(groupId, { index }, (group) => resolve(group))
+    })
+  }
+
   public async addToGroup({ tabGroupName }: IAddToGroupInput): Promise<ITabGroup> {
     const tabGroups = await this.getTabGroups({ title: tabGroupName })
     const tabs = await this.getTabs(this.getCurrentTabQuery)
@@ -97,11 +107,13 @@ export class TabsManager {
       //tab group does not exist
       const groupId = await this.newGroup(tabs)
       const group = await this.updateTabGroup({ groupId, tabGroupName })
+      await this.moveTabGroup({ index: 0, groupId })
       return { id: group.id, title: group.title || '' }
     } else {
       //tab group exists
       const groupId = tabGroups[0].id
       await this.moveTabsToGroup({ groupId, tabs })
+      await this.moveTabGroup({ index: 0, groupId })
       return { id: groupId, title: tabGroupName }
     }
   }

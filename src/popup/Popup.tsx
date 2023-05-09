@@ -1,5 +1,6 @@
 import { KeyboardEventHandler, useEffect, useState } from 'react'
 import CmdHandler from '../GroupTabHandlers/CmdHandler/CmdHandler'
+import { TagUI } from '../GroupTabHandlers/TagUIManger/tag_ui'
 import './Popup.css'
 
 function App() {
@@ -9,51 +10,8 @@ function App() {
   let tagUI = null
 
   useEffect(() => {
-    const tagInput = document.getElementById('tag-input') as Element
-    const tagContainer = document.querySelector('.tag-container') as Element
-
-    function createTag(text: string, command: boolean) {
-      if (text === '') return
-      const tag = document.createElement('span')
-      tag.classList.add('tag-item')
-      if (command) {
-        tag.classList.add('tag-command')
-      }
-      tag.setAttribute('contenteditable', 'false')
-      tag.innerHTML = `
-    ${text.trim()}
-    <button class="tag-remove ml-1">&times;</button>
-  `
-      tag.addEventListener('click', function (event: any) {
-        if (event.target.classList.contains('tag-remove')) {
-          event.target.parentNode.remove()
-        }
-      })
-      tagContainer.insertBefore(tag, tagInput.parentNode)
-      tagInput.textContent = ''
-    }
-
-    function tagInputKeyDown(event: any) {
-      if (event.keyCode === 13) {
-        event.preventDefault()
-        const text = tagInput.textContent || ''
-        const command = tagContainer.children.length <= 1
-        console.log(tagContainer.children)
-        createTag(text, command)
-      }
-    }
-
-    tagInput.addEventListener('keydown', tagInputKeyDown)
-
-    const tagCloseBtns = document.querySelectorAll('.tag-remove')
-    tagCloseBtns.forEach((tagCloseBtn) => {
-      tagCloseBtn.addEventListener('click', function (event: any) {
-        if (event.target.classList.contains('tag-remove')) {
-          event.target.parentNode.remove()
-        }
-      })
-    })
-  }, [])
+    tagUI = new TagUI()
+  })
 
   return (
     <main>
