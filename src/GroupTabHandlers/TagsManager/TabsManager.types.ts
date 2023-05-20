@@ -1,3 +1,5 @@
+import { ISerializedTabGroup } from '../SavedTabGroupsManager/SavedTabGroupManager.types'
+
 export interface IAddToGroupInput {
   tabGroupName: string
 }
@@ -5,6 +7,7 @@ export interface IAddToGroupInput {
 export interface IUpdateGroupInput {
   groupId: number
   tabGroupName: string
+  collapsed?: boolean /** @defaultValue 'true'*/
 }
 
 export interface ITabGroup {
@@ -65,4 +68,9 @@ export interface IDeleteTas {
 
 export interface ITabGroupInput {
   tabGroupName: string
+}
+
+export interface IRestoreTabGroupInput {
+  tabGroupName: string
+  serializedTabGroup: ISerializedTabGroup[]
 }

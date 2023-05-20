@@ -1,3 +1,4 @@
+import { ISerializedTabGroup } from '../SavedTabGroupsManager/SavedTabGroupManager.types'
 import {
   IAddToGroupInput,
   IDeleteTas,
@@ -5,6 +6,7 @@ import {
   IGroupCollapseOutput,
   IMoveTabGroup,
   IMoveTabToGroupInput,
+  IRestoreTabGroupInput,
   ITabGroup,
   ITabGroupCollapse,
   ITabGroupInput,
@@ -51,6 +53,28 @@ export class TabsManager {
     })
   }
 
+  public restoreSavedTabGroup = async ({
+    tabGroupName,
+    serializedTabGroup,
+  }: IRestoreTabGroupInput) => {
+    const newTabs = await Promise.all(
+      serializedTabGroup.map(
+        async (tab, tabIndex) =>
+          await chrome.tabs.create({ url: tab.url, index: tabIndex, active: false }),
+      ),
+    )
+    console.log({ newTabs })
+    const newGroupId = await this.newGroup(newTabs)
+    console.log({ newGroupId })
+    const newTabGrp = await this.updateTabGroup({ groupId: newGroupId, tabGroupName })
+    console.log({ newTabGrp })
+    return { err: '', msg: `restored tab group ${tabGroupName}` }
+  }
+
+  public async newEmptyTabGroup() {
+    return chrome.tabs.group({ tabIds: [] })
+  }
+
   public async moveTabsToGroup({ groupId, tabs }: IMoveTabToGroupInput): Promise<number> {
     return new Promise((resolve) => {
       chrome.tabs.group({ groupId, tabIds: this.getTabIds(tabs) }, (groupId) => resolve(groupId))
@@ -66,9 +90,12 @@ export class TabsManager {
   public async updateTabGroup({
     groupId,
     tabGroupName,
+    collapsed = true,
   }: IUpdateGroupInput): Promise<chrome.tabGroups.TabGroup> {
     return new Promise((resolve) => {
-      chrome.tabGroups.update(groupId, { title: tabGroupName }, (group) => resolve(group))
+      chrome.tabGroups.update(groupId, { title: tabGroupName, collapsed }, (group) =>
+        resolve(group),
+      )
     })
   }
 

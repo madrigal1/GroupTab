@@ -1,3 +1,4 @@
+import { SavedTabGroupManager } from '../SavedTabGroupsManager/SavedTabGroupManager'
 import { TabsManager } from '../TagsManager/TabsManager'
 import {
   ICmdHandlerInput,
@@ -13,6 +14,8 @@ export enum Cmd {
   REMOVE = 'remove',
   SEARCH = 'search',
   KILL = 'kill',
+  SAVE = 'save',
+  RESTORE = 'restore',
 }
 
 export interface ICmd {
@@ -32,7 +35,7 @@ export default class CmdHandler {
     },
     {
       name: Cmd.REMOVE,
-      alias: ['remove', 'r'],
+      alias: ['remove', 'rm'],
     },
     {
       name: Cmd.SEARCH,
@@ -42,8 +45,17 @@ export default class CmdHandler {
       name: Cmd.KILL,
       alias: ['kill', 'k'],
     },
+    {
+      name: Cmd.SAVE,
+      alias: ['save', 'sv'],
+    },
+    {
+      name: Cmd.RESTORE,
+      alias: ['restore', 'rs', 'rt'],
+    },
   ]
   public tabManager = new TabsManager()
+  public savedTabGroupManager = new SavedTabGroupManager({ tabManager: this.tabManager })
 
   public parseCmd = ({ user_input }: ICmdParserInput): ICommand => {
     const cmdArr = user_input.map((item) => item.trim()).filter((item) => item !== '')
@@ -114,6 +126,18 @@ export default class CmdHandler {
 
     if (cmd === Cmd.KILL) {
       const { err, msg } = await this.tabManager.givenTabGroupDeleteTabGroup({
+        tabGroupName: args[0],
+      })
+      return { err, msg }
+    }
+
+    if (cmd === Cmd.SAVE) {
+      const { err, msg } = await this.savedTabGroupManager.saveTabGroup({ tabGroupName: args[0] })
+      return { err, msg }
+    }
+
+    if (cmd === Cmd.RESTORE) {
+      const { err, msg } = await this.savedTabGroupManager.restoreTabGroup({
         tabGroupName: args[0],
       })
       return { err, msg }
