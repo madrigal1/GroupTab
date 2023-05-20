@@ -1,5 +1,4 @@
-import { KeyboardEventHandler, useEffect, useState } from 'react'
-import CmdHandler from '../GroupTabHandlers/CmdHandler/CmdHandler'
+import { useEffect, useRef } from 'react'
 import { TagUI } from '../GroupTabHandlers/TagUIManger/tag_ui'
 import './Popup.css'
 
@@ -8,9 +7,21 @@ function App() {
   // const [logs, setLogs] = useState('')
   // const cmdHandler = new CmdHandler()
   let tagUI = null
+  const tagInput = useRef<HTMLDivElement>(null)
+
+  const focusInput = () => {
+    let p = tagInput.current
+    console.log(p)
+    if (p) {
+      setTimeout(function () {
+        p?.focus()
+      }, 0)
+    }
+  }
 
   useEffect(() => {
     tagUI = new TagUI()
+    focusInput()
   })
 
   return (
@@ -21,6 +32,7 @@ function App() {
       <div className="tag-container p-4 border rounded flex flex-wrap items-center">
         <div id="tag-input-wrapper" className="flex items-center">
           <div
+            ref={tagInput}
             id="tag-input"
             contentEditable="true"
             className="border border-gray-300 rounded outline-none text-sm px-2 py-1"
