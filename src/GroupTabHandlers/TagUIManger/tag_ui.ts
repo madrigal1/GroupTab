@@ -47,10 +47,14 @@ export class TagUI {
 
   public tagInputKeyDown = async (event: any) => {
     if (event.keyCode === 32 || event.keyCode === 13) {
-      //on press space
+      //on press space or enter
       event.preventDefault()
       const text = this.tagInput?.textContent || ''
-      const command = this.tagContainer?.children?.length <= 1
+      const command = this.cmdHandler.isValidCmd(text)
+      if (command) {
+        this.currentCmd = []
+        // this.tagContainer.querySelectorAll('span').forEach((span) => span.remove());
+      }
       this.createTag(text, command)
       if (this.currentCmd.length == 0) {
         // console.log("skip empty cmd");
@@ -68,6 +72,7 @@ export class TagUI {
     }
 
     if (event.keyCode === 8) {
+      //on press backspace
       if (this.tagInput.textContent == '') {
         const lastSpan = Array.from(this.tagContainer.children)
           .filter((child) => child.tagName === 'SPAN')

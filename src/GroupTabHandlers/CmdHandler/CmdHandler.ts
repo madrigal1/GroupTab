@@ -57,6 +57,9 @@ export default class CmdHandler {
   public tabManager = new TabsManager()
   public savedTabGroupManager = new SavedTabGroupManager({ tabManager: this.tabManager })
 
+  public isValidCmd = (cmd: string): boolean => {
+    return this.cmds.some((cmdObj) => cmdObj.alias.includes(cmd))
+  }
   public parseCmd = ({ user_input }: ICmdParserInput): ICommand => {
     const cmdArr = user_input.map((item) => item.trim()).filter((item) => item !== '')
 
