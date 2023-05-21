@@ -41,7 +41,9 @@ To execute a command, follow these steps:
 Click on the GroupTabs toolbar icon in the Chrome browser.
 In the popup window, enter the desired command and the required arguments.
 Press Enter or click the "Execute" button to perform the command.
-Examples
+
+## Examples 💡
+
 Here are some examples to demonstrate the usage of the GroupTabs commands:
 
 Add a tab to a tab group: Enter add <group-name> or a <group-name> in the command input field. This will add the current tab to the specified tab group.
