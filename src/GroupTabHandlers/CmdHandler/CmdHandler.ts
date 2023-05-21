@@ -16,6 +16,7 @@ export enum Cmd {
   KILL = 'kill',
   SAVE = 'save',
   RESTORE = 'restore',
+  COLLAPSE_ALL = 'collapse-all',
 }
 
 export interface ICmd {
@@ -52,6 +53,10 @@ export default class CmdHandler {
     {
       name: Cmd.RESTORE,
       alias: ['restore', 'rs', 'rt'],
+    },
+    {
+      name: Cmd.COLLAPSE_ALL,
+      alias: ['collapse-all', 'c'],
     },
   ]
   public tabManager = new TabsManager()
@@ -95,7 +100,8 @@ export default class CmdHandler {
     }
   }
   public handleCmd = async ({ cmd, args }: ICmdHandlerInput): Promise<ICmdHandlerOutput> => {
-    if (cmd !== Cmd.REMOVE) {
+    const noArgsCmds: string[] = [Cmd.COLLAPSE_ALL, Cmd.REMOVE]
+    if (!noArgsCmds.includes(cmd)) {
       const check = this.checkMinArgsErr({ args, minArgs: 1 })
       if (check.err !== '') return check
     }
@@ -144,6 +150,11 @@ export default class CmdHandler {
         tabGroupName: args[0],
       })
       return { err, msg }
+    }
+
+    if (cmd === Cmd.COLLAPSE_ALL) {
+      await this.tabManager.collapseAllTabGroups()
+      return { err: '', msg: 'collapsed all tab groups' }
     }
     return { err: `No Handler for Cmd ${cmd} found`, msg: '' }
   }

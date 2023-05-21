@@ -1,4 +1,3 @@
-import { ISerializedTabGroup } from '../SavedTabGroupsManager/SavedTabGroupManager.types'
 import {
   IAddToGroupInput,
   IDeleteTas,
@@ -152,6 +151,12 @@ export class TabsManager {
   public async deleteTabs({ tabs }: IDeleteTas): Promise<void> {
     return new Promise((resolve) => {
       chrome.tabs.remove(this.getTabIds(tabs), () => resolve())
+    })
+  }
+  public collapseAllTabGroups = async () => {
+    const tabGroups = await this.getTabGroups({})
+    tabGroups.forEach(async (tabGroup) => {
+      await this.collapseGroup({ groupId: tabGroup.id, collapsed: false })
     })
   }
   public async removeTabFromGroup(): Promise<ITabGroupRemoveOutput> {
