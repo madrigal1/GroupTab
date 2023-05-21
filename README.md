@@ -22,7 +22,8 @@ To install GroupTabs, follow these steps:
 4. Click the "Load unpacked" button and select the folder containing the source code.
 5. The GroupTabs icon should now appear in your Chrome toolbar.
 
-Usage
+## Usage 🔧
+
 Once you have installed the GroupTabs extension, you can start using its features to manage your tab groups. GroupTabs provides several commands that you can execute to perform various actions. Here's a list of available commands and their usage:
 
 add <group-name> or a <group-name>: Add the current tab to a new or existing tab group specified by <group-name>.
