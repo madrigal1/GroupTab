@@ -1,4 +1,4 @@
-![Group Tabs Logo green](./logo_green.png)
+![Group Tabs Logo green](https://images2.imgbox.com/30/46/vY0uentL_o.png)
 
 ## About 📖
 
