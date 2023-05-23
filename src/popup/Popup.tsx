@@ -32,7 +32,7 @@ function App() {
         <h2 className="text-black font-medium text-lg">GroupTabs</h2>
         <h6 className="text-gray-400 font-medium text-custom-md mr-2">v1.0.0</h6>
       </header>
-      <div className="tag-container p-4 border rounded flex flex-wrap items-center">
+      <div className="tag-container p-4 border rounded flex flex-wrap items-center mt-2">
         <div id="tag-input-wrapper" className="flex items-center">
           <div
             ref={tagInput}
@@ -42,7 +42,7 @@ function App() {
           ></div>
         </div>
       </div>
-      <footer className="flex justify-between items-center mt-4 mx-1">
+      <footer className="flex justify-between items-center mt-3 mx-1">
         <div className="flex items-center">
           <img className="object-contain mr-2 sm-img" src={Menu1} alt="save button" />
           <p className="font-semibold">Saves</p>
