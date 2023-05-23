@@ -30,3 +30,10 @@
   background-color: #4a5568;
   color: #fff;
 }
+
+.sm-img {
+  max-width: 0.9rem;
+}
+.md-img {
+  max-width: 1.25rem;
+}
