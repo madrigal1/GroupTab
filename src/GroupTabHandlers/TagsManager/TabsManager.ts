@@ -182,7 +182,8 @@ export class TabsManager {
     const allTabs = await this.getTabs({})
     console.log({
       tabName,
-      allTabs: allTabs.map((ele) => ele.title),
+      allTabs,
+      allTabsTitle: allTabs.map((ele) => ele.title),
       allUrls: allTabs.map((ele) => ele.url),
     })
     const tab = allTabs.find((tab) => {
@@ -193,6 +194,7 @@ export class TabsManager {
     })
     if (tab) {
       const currTab = await this.updateTab({ tab, settings: this.getActiveTabQuery })
+      console.log({ searchResult: currTab })
       return { found: true, tab_id: tab.id || -1, title: currTab?.title || '' }
     } else {
       return { found: false, tab_id: -1, title: '' }

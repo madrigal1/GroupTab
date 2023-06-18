@@ -126,7 +126,7 @@ export default class CmdHandler {
         tabName: args[0],
       })
       return {
-        err: found ? `Tab not found` : '',
+        err: !found ? `Tab not found` : '',
         msg: found
           ? `Tab ${title} found and switched to. Tab_id: ${tab_id}`
           : `Tab ${title} not found`,
