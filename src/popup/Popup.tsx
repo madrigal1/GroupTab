@@ -24,6 +24,10 @@ function App() {
   useEffect(() => {
     tagUI = new TagUI()
     focusInput()
+    const settingsBtn = document.getElementById('Settings')
+    settingsBtn?.addEventListener('click', () => {
+      chrome.runtime.openOptionsPage()
+    })
   })
 
   return (
@@ -47,7 +51,7 @@ function App() {
           <img className="object-contain mr-2 sm-img" src={Menu1} alt="save button" />
           <p className="font-semibold">Saves</p>
         </div>
-        <div>
+        <div id="Settings">
           <img src={GearIcon} alt="gear icon" className="md-img" />
         </div>
       </footer>
