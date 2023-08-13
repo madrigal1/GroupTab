@@ -34,7 +34,7 @@ export class TabsManager {
     const allTabGroups = await this.getTabGroups({})
 
     allTabGroups.forEach((group) => {
-      tabGroupMap.set(group.id, group.title || 'Untitled Group')
+      tabGroupMap.set(group.id, group)
     })
     return tabGroupMap
   }

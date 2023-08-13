@@ -6,12 +6,17 @@ function App() {
   const [crx, setCrx] = useState('create-chrome-ext')
 
   const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([])
+  const [grpIdMap, setGrpIdMap] = useState<Map<number, chrome.tabGroups.TabGroup>>(new Map())
 
   useEffect(() => {
     ;(async () => {
       const tm = new TabsManager()
       const tabs = await tm.getTabs({})
+      const grpIdMap = await tm.getTabGroupMap()
+
       setTabs(tabs)
+      setGrpIdMap(grpIdMap)
+      console.log(grpIdMap)
     })()
   })
 
@@ -19,13 +24,19 @@ function App() {
     <main>
       <h1 className="text-xl font-semibold mb-4">Group Tab</h1>
       <section className="space-y-4">
-        <TabList tabs={tabs} />
+        <TabList tabs={tabs} grpIdMap={grpIdMap} />
       </section>
     </main>
   )
 }
 
-function TabList({ tabs }: { tabs: chrome.tabs.Tab[] }) {
+function TabList({
+  tabs,
+  grpIdMap,
+}: {
+  tabs: chrome.tabs.Tab[]
+  grpIdMap: Map<number, chrome.tabGroups.TabGroup>
+}) {
   return (
     <div className="p-6 bg-gray-900 text-white">
       <h1 className="text-2xl font-semibold mb-4">Tab List</h1>
@@ -35,7 +46,7 @@ function TabList({ tabs }: { tabs: chrome.tabs.Tab[] }) {
             <tr className="bg-gray-800">
               <th className="px-4 py-2">Icon</th> {/* New column */}
               <th className="px-4 py-2">Tab Title</th>
-              <th className="px-4 py-2">Group ID</th>
+              <th className="px-4 py-2">Tab Group</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
@@ -45,7 +56,7 @@ function TabList({ tabs }: { tabs: chrome.tabs.Tab[] }) {
                   {tab.favIconUrl && <img src={tab.favIconUrl} alt="Favicon" className="w-6 h-6" />}
                 </td>
                 <td className="px-4 py-2 max-w-[0.5rem] truncate text-left">{tab.url}</td>
-                <td className="px-4 py-2">{tab.groupId}</td>
+                <td className="px-4 py-2">{grpIdMap.get(tab.groupId)?.title || '-'}</td>
               </tr>
             ))}
           </tbody>
