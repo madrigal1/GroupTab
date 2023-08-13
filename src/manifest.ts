@@ -2,7 +2,8 @@ import { defineManifest } from '@crxjs/vite-plugin'
 
 export default defineManifest({
   name: 'GroupTab',
-  description: '',
+  description:
+    'Group tab is a keyboard driven tab manager to allow you to manage multi page workflows with ease.',
   version: '0.0.0.1',
   manifest_version: 3,
   icons: {
