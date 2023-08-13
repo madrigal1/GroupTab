@@ -29,6 +29,16 @@ export class TabsManager {
     return groups.length > 0
   }
 
+  public async getTabGroupMap(): Promise<Map<number, chrome.tabGroups.TabGroup>> {
+    const tabGroupMap = new Map()
+    const allTabGroups = await this.getTabGroups({})
+
+    allTabGroups.forEach((group) => {
+      tabGroupMap.set(group.id, group.title || 'Untitled Group')
+    })
+    return tabGroupMap
+  }
+
   public async getTabs(queryInfo: chrome.tabs.QueryInfo): Promise<chrome.tabs.Tab[]> {
     return new Promise((resolve) => {
       chrome.tabs.query(queryInfo, (tabs) => resolve(tabs))
