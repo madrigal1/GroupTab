@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './Options.css'
 import { TabsManager } from '../GroupTabHandlers/TagsManager/TabsManager'
+import LogoDark from '../assets/logo_dark.png'
 
 function App() {
   const [crx, setCrx] = useState('create-chrome-ext')
@@ -16,14 +17,15 @@ function App() {
 
       setTabs(tabs)
       setGrpIdMap(grpIdMap)
-      console.log(grpIdMap)
     })()
   })
 
   return (
-    <main>
-      <h1 className="text-xl font-semibold mb-4">Group Tab</h1>
-      <section className="space-y-4">
+    <main className="p-0">
+      <header className="py-5 px-6 flex justify-center">
+        <img className="max-w-[10rem]" src={LogoDark} alt="logo dark" />
+      </header>
+      <section>
         <TabList tabs={tabs} grpIdMap={grpIdMap} />
       </section>
     </main>
@@ -38,7 +40,7 @@ function TabList({
   grpIdMap: Map<number, chrome.tabGroups.TabGroup>
 }) {
   return (
-    <div className="p-6 bg-gray-900 text-white">
+    <div className="p-6 bg-gray-900 rounded-lg text-white">
       <h1 className="text-2xl font-semibold mb-4">Tab List</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-700">

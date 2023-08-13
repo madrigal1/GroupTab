@@ -6,10 +6,10 @@ export default defineManifest({
   version: '0.0.0',
   manifest_version: 3,
   icons: {
-    '16': 'img/icon_green.png',
-    '32': 'img/icon_green.png',
-    '48': 'img/icon_green.png',
-    '128': 'img/icon_green.png',
+    '16': 'img/icon_black.png',
+    '32': 'img/icon_black.png',
+    '48': 'img/icon_black.png',
+    '128': 'img/icon_black.png',
   },
   action: {
     default_popup: 'popup.html',

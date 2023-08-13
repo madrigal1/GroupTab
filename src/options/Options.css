@@ -15,7 +15,28 @@
     animation: logo-spin infinite 20s linear;
   }
 }
+body {
+  background-color: #000000;
+  overflow-x: hidden;
+}
 
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 4px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #111827; /* Background color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Color of the scrollbar thumb on hover */
+}
 main {
   text-align: center;
   padding: 1em;

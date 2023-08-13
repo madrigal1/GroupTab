@@ -24,10 +24,6 @@ function App() {
   useEffect(() => {
     tagUI = new TagUI()
     focusInput()
-    const settingsBtn = document.getElementById('Settings')
-    settingsBtn?.addEventListener('click', () => {
-      chrome.runtime.openOptionsPage()
-    })
   })
 
   return (
@@ -47,11 +43,11 @@ function App() {
         </div>
       </div>
       <footer className="flex justify-between items-center mt-3 mx-1">
-        <div className="flex items-center">
+        <div className="flex items-center" onClick={() => chrome.runtime.openOptionsPage()}>
           <img className="object-contain mr-2 sm-img" src={Menu1} alt="save button" />
           <p className="font-semibold">Saves</p>
         </div>
-        <div id="Settings">
+        <div id="Settings" onClick={() => chrome.runtime.openOptionsPage()}>
           <img src={GearIcon} alt="gear icon" className="md-img" />
         </div>
       </footer>
